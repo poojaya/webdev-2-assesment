@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Events</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="search.html">Search</a>
+  </nav>
+
+  <h1>Search Charity Events</h1>
+  <form id="searchForm">
+    Date: <input type="date" id="date" name="date" />
+    City: <input type="text" id="city" name="city" />
+    Category: <select id="category"></select>
+    <button type="submit">Search</button>
+    <button type="button" id="clearBtn">Clear</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script src="js/search.js"></script>
+</body>
+</html>
