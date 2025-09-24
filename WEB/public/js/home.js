@@ -15,6 +15,6 @@ fetch(`${API_BASE}/events`)
         <p>${ev.category_id} • ${ev.city}</p>
         <a href="/event.html?id=${ev.event_id}">View details</a>
       `;
-      wrap.appendChild(card);
+      wrap.appendChild(card);      
     });
   });
