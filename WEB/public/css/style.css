@@ -1,14 +1,28 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f5f5f5;
+    background-color: #f4f4f7;
+    margin: 20px;
   }
   
-  .card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    margin: 20px auto;
-    padding: 16px;
-    max-width: 500px;
+  nav a {
+    margin-right: 10px;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  
+  h1 {
+    color: #222;
+  }
+  
+  #events-list p, #results div {
+    background: #fff;
+    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
   }
   
