@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
-
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -11,4 +10,4 @@ app.use('/api/events', require('./routes/events'));
 app.use('/api/organisations', require('./routes/organisations'));
 
 const PORT = process.env.PORT || 3060;
-app.listen(PORT, () => console.log(`API listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`API listening on http://localhost:${PORT}`));

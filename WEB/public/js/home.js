@@ -1,20 +1,26 @@
-const API_BASE = 'http://localhost:3060/api';
+const API = 'http://localhost:3060/api';
 
-fetch(`${API_BASE}/events`)
-  .then(resp => resp.json())
-  .then(events => {
-    const listEl = document.getElementById('events-list');
-    if (!events.length) {
-      listEl.textContent = 'No events found';
-      return;
-    }
+async function loadHome() {
+  const list = document.getElementById('events-list');
+  list.textContent = 'Loading...';
+  try {
+    const resp = await fetch(`${API}/events`);
+    const events = await resp.json();
+    list.innerHTML = '';
+    if (!events.length) { list.textContent = 'No upcoming events.'; return; }
     events.forEach(ev => {
-      const p = document.createElement('p');
-      p.innerHTML = `<strong>${ev.title}</strong> in ${ev.city} - <a href="event.html?id=${ev.event_id}">Details</a>`;
-      listEl.appendChild(p);
+      const card = document.createElement('div');
+      const date = new Date(ev.start_datetime).toLocaleString();
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${ev.title}</h3>
+        <p>${ev.category_name} • ${ev.city} • ${date}</p>
+        <a href="event.html?id=${ev.event_id}">View details</a>
+      `;
+      list.appendChild(card);
     });
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById('events-list').textContent = 'Failed to load events.';
-  });
+  } catch {
+    list.textContent = 'Failed to load events.';
+  }
+}
+document.addEventListener('DOMContentLoaded', loadHome);

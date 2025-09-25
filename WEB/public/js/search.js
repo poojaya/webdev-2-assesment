@@ -1,43 +1,48 @@
-const API_BASE = 'http://localhost:3060/api';
-
-const form = document.getElementById('searchForm');
-const resultsDiv = document.getElementById('results');
+const API = 'http://localhost:3060/api';
 const categorySelect = document.getElementById('category');
+const form = document.getElementById('searchForm');
+const results = document.getElementById('results');
 
-// Populate categories dropdown
-fetch(`${API_BASE}/categories`)
-  .then(res => res.json())
-  .then(categories => {
-    categorySelect.innerHTML = `<option value="">All Categories</option>` +
-      categories.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('');
-  });
+async function loadCategories() {
+  const res = await fetch(`${API}/categories`);
+  const cats = await res.json();
+  categorySelect.innerHTML = `<option value="">All categories</option>` +
+    cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+}
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const params = new URLSearchParams();
-  if (form.date.value) params.append('date', form.date.value);
-  if (form.city.value) params.append('city', form.city.value);
-  if (form.category.value) params.append('category', form.category.value);
+  const d = form.date.value.trim();
+  const city = form.city.value.trim();
+  const cat = form.category.value;
+  if (d) params.append('date', d);
+  if (city) params.append('city', city);
+  if (cat) params.append('category', cat);
 
-  fetch(`${API_BASE}/events/search?${params.toString()}`)
-    .then(res => res.json())
-    .then(events => {
-      resultsDiv.innerHTML = '';
-      if(!events.length) {
-        resultsDiv.textContent = 'No matching events found';
-        return;
-      }
-      events.forEach(ev => {
-        const div = document.createElement('div');
-        div.innerHTML = `<strong>${ev.title}</strong> in ${ev.city} - <a href="event.html?id=${ev.event_id}">Details</a>`;
-        resultsDiv.appendChild(div); 
-      });
-    })
-    .catch(() => resultsDiv.textContent = 'Search failed.');
+  results.textContent = 'Searching...';
+  try {
+    const res = await fetch(`${API}/events/search?${params}`);
+    const events = await res.json();
+    results.innerHTML = '';
+    if (!events.length) { results.textContent = 'No matches.'; return; }
+    events.forEach(ev => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <strong>${ev.title}</strong> — ${ev.city}
+        <div><a href="event.html?id=${ev.event_id}">Details</a></div>
+      `;
+      results.appendChild(div);
+    });
+  } catch {
+    results.textContent = 'Search failed.';
+  }
 });
 
-// Clear button functionality
 document.getElementById('clearBtn').addEventListener('click', () => {
   form.reset();
-  resultsDiv.innerHTML = '';
+  results.innerHTML = '';
 });
+
+document.addEventListener('DOMContentLoaded', loadCategories);
