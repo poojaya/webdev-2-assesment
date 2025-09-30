@@ -1,58 +1,70 @@
-// /WEB/public/js/event.js
+// Change if your API port changes
 const API_BASE = 'http://localhost:3060/api';
 
 function fmtDateTime(iso) {
   if (!iso) return '-';
-  const d = new Date(iso);
-  return d.toLocaleString();
+  return new Date(iso).toLocaleString();
 }
 
-function currency(n) {
-  if (n == null) return '-';
-  return Number(n).toLocaleString(undefined, { style: 'currency', currency: 'AUD' });
+function buildQueryFromForm(form) {
+  const p = new URLSearchParams();
+  ['q','category','org','city','state','date','after'].forEach(k => {
+    const v = form[k].value.trim();
+    if (v) p.append(k, v);
+  });
+  return p.toString();
 }
 
-async function loadEvent() {
-  const params = new URLSearchParams(location.search);
-  const id = params.get('id');
-  if (!id) {
-    document.getElementById('event-detail').innerHTML = '<p>No event id.</p>';
+async function load(query = '') {
+  const url = `${API_BASE}/events${query ? `?${query}` : ''}`;
+  const res = await fetch(url);
+  const rows = await res.json();
+
+  const tbody = document.querySelector('#results tbody');
+  tbody.innerHTML = rows.map(e => `
+    <tr>
+      <td>${e.event_id}</td>
+      <td><a href="/event.html?id=${e.event_id}">${e.title}</a></td>
+      <td>${fmtDateTime(e.start_datetime)}</td>
+      <td>${e.city ?? '-'}</td>
+      <td>${e.category_name ?? e.category_id}</td>
+      <td>${e.org_name ?? e.org_id}</td>
+      <td>
+        <button data-del="${e.event_id}">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function deleteEvent(id) {
+  if (!confirm(`Delete event #${id}?`)) return;
+  const res = await fetch(`${API_BASE}/events/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    alert('Delete failed');
     return;
   }
-
-  try {
-    const res = await fetch(`${API_BASE}/events/${id}`);
-    if (!res.ok) throw new Error('Failed to load');
-    const e = await res.json();
-
-    const prog = e.goal_amount ? Math.min(100, Math.round((Number(e.raised_amount || 0) / Number(e.goal_amount)) * 100)) : 0;
-
-    document.getElementById('event-detail').innerHTML = `
-      <h1>${e.title}</h1>
-      <p>${e.description || ''}</p>
-
-      <h3>Details</h3>
-      <ul>
-        <li><strong>Category:</strong> ${e.category_name}</li>
-        <li><strong>Organisation:</strong> ${e.org_name}</li>
-        <li><strong>When:</strong> ${fmtDateTime(e.start_datetime)} — ${fmtDateTime(e.end_datetime)}</li>
-        <li><strong>Where:</strong> ${[e.venue, e.city, e.state, e.country].filter(Boolean).join(', ') || '-'}</li>
-        <li><strong>Capacity:</strong> ${e.capacity ?? '-'}</li>
-        <li><strong>Ticket price:</strong> ${currency(e.ticket_price)}</li>
-      </ul>
-
-      <h3>Fundraising</h3>
-      <p><strong>Goal:</strong> ${currency(e.goal_amount)} &nbsp; <strong>Raised:</strong> ${currency(e.raised_amount)} (${prog}%)</p>
-      <div style="background:#eee;height:10px;border-radius:6px;overflow:hidden">
-        <div style="height:10px;width:${prog}%;background:#4caf50"></div>
-      </div>
-
-      <p style="margin-top:16px"><a href="/index.html" class="link">← Back to home</a></p>
-    `;
-  } catch (err) {
-    console.error(err);
-    document.getElementById('event-detail').innerHTML = '<p>Failed to load the event.</p>';
-  }
+  // reload with current filters
+  const q = buildQueryFromForm(document.getElementById('searchForm'));
+  load(q);
 }
 
-window.addEventListener('DOMContentLoaded', loadEvent);
+window.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('searchForm');
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const q = buildQueryFromForm(form);
+    load(q);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    form.reset();
+    load();
+  });
+
+  document.querySelector('#results').addEventListener('click', (e) => {
+    const id = e.target?.dataset?.del;
+    if (id) deleteEvent(Number(id));
+  });
+
+  load();
+});
