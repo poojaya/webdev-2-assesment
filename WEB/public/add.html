@@ -1,50 +1,42 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Add Event</title>
-  <link rel="stylesheet" href="/public/css/styles.css">
+  <meta charset="utf-8" />
+  <title>Add event</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
 <body>
-  <nav>
-    <a href="/">Home</a> | <a href="/search">Search</a> | <a href="/add">Add Event</a>
-  </nav>
+  <h1>Add event</h1>
 
-  <h1>Add Event</h1>
+  <form id="addForm" novalidate>
+    <fieldset>
+      <legend>Required</legend>
+      <label>Org ID* <input name="org_id" type="number" min="1" required /></label>
+      <label>Category ID* <input name="category_id" type="number" min="1" required /></label>
+      <label>Title* <input name="title" required /></label>
+      <label>Start* <input name="start_datetime" type="datetime-local" required /></label>
+    </fieldset>
 
-  <form id="eventForm">
-    <label>Organisation ID*</label>
-    <input type="number" id="org_id" required>
+    <fieldset>
+      <legend>Optional</legend>
+      <label>Description <textarea name="description"></textarea></label>
+      <label>End <input name="end_datetime" type="datetime-local" /></label>
+      <label>Venue <input name="venue" /></label>
+      <label>City <input name="city" /></label>
+      <label>State <input name="state" /></label>
+      <label>Country <input name="country" /></label>
+      <label>Capacity <input name="capacity" type="number" min="0" /></label>
+      <label>Ticket price <input name="ticket_price" type="number" step="0.01" min="0" /></label>
+      <label>Goal amount <input name="goal_amount" type="number" step="0.01" min="0" /></label>
+    </fieldset>
 
-    <label>Category ID*</label>
-    <input type="number" id="category_id" required>
+    <p id="err" style="color:#c00"></p>
+    <p id="ok" style="color:#080"></p>
 
-    <label>Title*</label>
-    <input type="text" id="title" required>
-
-    <label>Description</label>
-    <textarea id="description"></textarea>
-
-    <label>Start (YYYY-MM-DD HH:MM:SS)*</label>
-    <input type="text" id="start_datetime" placeholder="2025-10-01 10:00:00" required>
-
-    <label>End (YYYY-MM-DD HH:MM:SS)</label>
-    <input type="text" id="end_datetime" placeholder="2025-10-01 12:00:00">
-
-    <label>City</label>
-    <input type="text" id="city">
-
-    <label>Venue</label>
-    <input type="text" id="venue">
-
-    <label>Status</label>
-    <input type="text" id="status" value="ACTIVE">
-
-    <button type="submit">Save</button>
+    <button type="submit">Create</button>
+    <a href="/events.html">Cancel</a>
   </form>
 
-  <p id="msg"></p>
-
-  <script src="/public/js/add.js"></script>
+  <script src="/js/add.js"></script>
 </body>
 </html>
