@@ -1,48 +1,50 @@
+// /WEB/public/js/search.js
 const API = 'http://localhost:3060/api';
-const categorySelect = document.getElementById('category');
-const form = document.getElementById('searchForm');
-const results = document.getElementById('results');
 
-async function loadCategories() {
-  const res = await fetch(`${API}/categories`);
-  const cats = await res.json();
-  categorySelect.innerHTML = `<option value="">All categories</option>` +
-    cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+function card(e) {
+  const date = new Date(e.start_datetime).toLocaleString();
+  return `
+    <div class="card">
+      <h3>${e.title}</h3>
+      <p>${e.category_name} • ${e.org_name}</p>
+      <p>${e.city || '-'} • ${date}</p>
+      <p><a href="/event.html?id=${e.event_id}" class="link">View details</a></p>
+    </div>
+  `;
 }
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+async function loadCategories() {
+  const sel = document.getElementById('category');
+  const res = await fetch(`${API}/categories`);
+  const cats = await res.json();
+  sel.innerHTML = `<option value="">Any category</option>` +
+    cats.map(c => `<option value="${c.category_id}">${c.name}</option>`).join('');
+}
+
+async function performSearch(ev) {
+  ev?.preventDefault();
+  const q = document.getElementById('q').value.trim();
+  const category = document.getElementById('category').value;
+  const city = document.getElementById('city').value.trim();
+  const date = document.getElementById('date').value; // yyyy-mm-dd
+
   const params = new URLSearchParams();
-  const d = form.date.value.trim();
-  const city = form.city.value.trim();
-  const cat = form.category.value;
-  if (d) params.append('date', d);
-  if (city) params.append('city', city);
-  if (cat) params.append('category', cat);
+  if (q) params.set('q', q);
+  if (category) params.set('category', category);
+  if (city) params.set('city', city);
+  if (date) params.set('date', date);
 
-  results.textContent = 'Searching...';
-  try {
-    const res = await fetch(`${API}/events/search?${params}`);
-    const events = await res.json();
-    results.innerHTML = '';
-    if (!events.length) { results.textContent = 'No matches.'; return; }
-    events.forEach(ev => {
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `
-        <strong>${ev.title}</strong> — ${ev.city}
-        <div><a href="event.html?id=${ev.event_id}">Details</a></div>
-      `;
-      results.appendChild(div);
-    });
-  } catch {
-    results.textContent = 'Search failed.';
-  }
+  const res = await fetch(`${API}/events?` + params.toString());
+  const data = await res.json();
+
+  const list = document.getElementById('results');
+  list.innerHTML = data.length
+    ? data.map(card).join('')
+    : `<p>No results found.</p>`;
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadCategories();
+  await performSearch(); // initial
+  document.getElementById('searchForm').addEventListener('submit', performSearch);
 });
-
-document.getElementById('clearBtn').addEventListener('click', () => {
-  form.reset();
-  results.innerHTML = '';
-});
-
-document.addEventListener('DOMContentLoaded', loadCategories);
