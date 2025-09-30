@@ -1,19 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
+
 const app = express();
-const PORT = 3000;
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve everything in the WEB folder
-app.use(express.static(__dirname));
-
-// Default route -> index.html
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+// Optional: expose API base to the browser so you don't hard-code it
+app.get('/config.js', (req, res) => {
+  res.type('application/javascript')
+     .send(`window.CONFIG=${JSON.stringify({API_BASE: process.env.API_BASE || 'http://localhost:3060/api'})}`);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-app.get('/add', (req, res) => {
-  res.sendFile(path.join(__dirname, 'add.html'));
-});
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`WEB listening on ${PORT}`));
