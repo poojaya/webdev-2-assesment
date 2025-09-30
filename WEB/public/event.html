@@ -1,22 +1,36 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Event Details</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="utf-8" />
+  <title>Browse events</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
 <body>
-  <nav>
-    <a href="index.html">Home</a> |
-    <a href="search.html">Search</a>
-  </nav>
+  <h1>Browse events</h1>
 
-  <h1>Event Details</h1>
-  <div id="event-detail"></div>
-  <button id="deleteBtn">Delete this event</button>
-<p id="deleteMsg"></p>
-<script src="/public/js/event.js"></script>
+  <form id="searchForm">
+    <label>Text search <input name="q" placeholder="title or description" /></label>
+    <label>Category ID <input name="category" type="number" min="1" /></label>
+    <label>Org ID <input name="org" type="number" min="1" /></label>
+    <label>City <input name="city" /></label>
+    <label>State <input name="state" /></label>
+    <label>Date <input name="date" type="date" /></label>
+    <label>After <input name="after" type="datetime-local" /></label>
+    <button type="submit">Search</button>
+    <button type="button" id="clearBtn">Clear</button>
+  </form>
 
+  <p style="margin:12px 0"><a href="/add.html">+ Add new event</a></p>
 
-  <script src="js/event.js"></script>
+  <table id="results" border="1" cellpadding="6" cellspacing="0">
+    <thead>
+      <tr>
+        <th>ID</th><th>Title</th><th>When</th><th>City</th><th>Category</th><th>Org</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="/js/events.js"></script>
 </body>
 </html>
