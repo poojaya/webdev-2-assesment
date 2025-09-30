@@ -14,3 +14,6 @@ app.get('/', (_req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+app.get('/add', (req, res) => {
+  res.sendFile(path.join(__dirname, 'add.html'));
+});
