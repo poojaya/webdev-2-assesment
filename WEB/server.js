@@ -1,14 +1,15 @@
 // WEB/server.js
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const app = express();
+require('dotenv').config();
 
+const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (_req, res) =>
+// optional: SPA fallback – keeps direct links working
+app.get('*', (_req, res) =>
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 );
 
