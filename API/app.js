@@ -12,3 +12,7 @@ app.use('/api/events', require('./routes/events')); // your events router
 app.get('/api/health', (_,res)=>res.json({ok:true}));
 const PORT = process.env.PORT || 3060;
 app.listen(PORT, () => console.log(`API listening on ${PORT}`));
+app.get('/', (_req, res) => {
+    res.send('Charity API is running. Try GET /api/events');
+  });
+  
