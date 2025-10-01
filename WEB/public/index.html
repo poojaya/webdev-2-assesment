@@ -11,8 +11,24 @@
     <meta charset="utf-8" />
     <title>Charity Events</title>
   </head>
-  <body>
-    <h1>Charity Events</h1>
-    <p><a href="/events.html">Browse events</a> | <a href="/add.html">Function Ceremony</a></p>
-  </body>
+  <!-- WEB/public/index.html (replace body contents with this) -->
+<body>
+  <h1>Charity Events</h1>
+  <nav style="margin:12px 0">
+    <a href="/index.html">Home</a> |
+    <a href="/events.html">Browse events</a> |
+    <a href="/add.html">Add event</a>
+  </nav>
+
+  <section style="max-width:900px">
+    <h2>About us</h2>
+    <p>We support local causes through community events. Contact: info@example.org</p>
+
+    <h2 style="margin-top:24px">Upcoming events</h2>
+    <div id="home-list">Loading…</div>
+  </section>
+
+  <script src="/js/home.js"></script>
+</body>
+
 </html>
