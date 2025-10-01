@@ -57,3 +57,6 @@ INSERT IGNORE INTO events (org_id,category_id,title,description,start_datetime,e
 (1,1,'5K Spring Fun Run','Family friendly run','2025-10-20 09:00:00','2025-10-20 12:00:00','River Park','Melbourne','VIC','Australia',500,10.00,20000,4500),
 (2,2,'Gala Dinner','Black tie fundraising night','2025-11-05 19:00:00','2025-11-05 23:00:00','Grand Hall','Sydney','NSW','Australia',300,120.00,50000,18000),
 (1,3,'Coding for Kids','STEM workshop','2025-10-28 10:00:00','2025-10-28 16:00:00','Tech Hub','Brisbane','QLD','Australia',60,0.00,5000,700);
+
+ALTER TABLE events
+  ADD COLUMN status ENUM('ACTIVE','SUSPENDED') NOT NULL DEFAULT 'ACTIVE';
