@@ -172,7 +172,8 @@ kill -9 <PID>
 
 
 
-## Screenshots
+<details>
+<summary>Click to view screenshots</summary>
 
 ### Database tables (MySQL Workbench)
 ![MySQL Workbench – charityevents_db tables](./docs/workbench-tables.png)
@@ -185,6 +186,10 @@ kill -9 <PID>
 
 ### ERD
 ![ERD – Organisations, Categories, Events](./docs/erd.png)
+
+</details>
+
+
 
 
 
