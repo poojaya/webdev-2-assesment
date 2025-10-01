@@ -52,14 +52,25 @@ function renderTable(rows) {
   `).join('');
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+async function fillSelect(id, url, valueField, textField, anyLabel) {
+  const sel = document.getElementById(id);
+  const res = await fetch(url);
+  const rows = await res.json();
+  sel.innerHTML = `<option value="">${anyLabel}</option>` +
+    rows.map(r => `<option value="${r[valueField]}">${r[textField]}</option>`).join('');
+}
+window.addEventListener('DOMContentLoaded', async () => {
+  await Promise.all([
+    fillSelect('category', `${API_BASE}/categories`, 'category_id', 'name', 'Any category'),
+    fillSelect('org', `${API_BASE}/organisations`, 'org_id', 'name', 'Any organisation')
+  ]);
   document.getElementById('search-form').addEventListener('submit', runSearch);
   document.getElementById('reset-btn').addEventListener('click', () => {
-    document.getElementById('search-form').reset();
-    runSearch();
+    document.getElementById('search-form').reset(); runSearch();
   });
-  runSearch(); // initial load
+  runSearch();
 });
+
 document.getElementById('register-btn')?.addEventListener('click', () => {
   alert('Registration is under construction for Assessment 2.');
 });
