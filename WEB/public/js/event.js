@@ -60,3 +60,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   runSearch(); // initial load
 });
+document.getElementById('register-btn')?.addEventListener('click', () => {
+  alert('Registration is under construction for Assessment 2.');
+});
