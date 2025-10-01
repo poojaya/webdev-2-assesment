@@ -172,6 +172,22 @@ kill -9 <PID>
 
 
 
+## Screenshots
+
+### Database tables (MySQL Workbench)
+![MySQL Workbench – charityevents_db tables](docs/workbench-tables.png)
+
+### Home page
+![Home page listing upcoming events](docs/app-home.png)
+
+### Search page
+![Search page with filters and results](docs/app-search.png)
+
+### ERD
+![ERD – Organisations, Categories, Events](docs/erd.png)
+
+
+
 DB connection: verify API/.env credentials & DB_NAME.
 
 CORS: API enables cors(); ensure WEB/.env API_BASE matches the API URL.
