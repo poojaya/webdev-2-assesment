@@ -172,22 +172,20 @@ kill -9 <PID>
 
 
 
-<details>
-  <summary><strong>Click to view screenshots</strong></summary>
+## Screenshots
 
-  <p>
-    <img src="docs/workbench-tables.png" alt="MySQL Workbench — charityevents_db tables" width="900">
-  </p>
-  <p>
-    <img src="docs/app-home.png" alt="Home page listing upcoming events" width="900">
-  </p>
-  <p>
-    <img src="docs/app-search.png" alt="Search page with filters and results" width="900">
-  </p>
-  <p>
-    <img src="docs/erd.png" alt="ERD — Organisations, Categories, Events" width="900">
-  </p>
-</details>
+### Database tables (MySQL Workbench)
+![MySQL Workbench — charityevents_db tables](docs/workbench-tables.png)
+
+### Home page
+![Home page listing upcoming events](docs/app-home.png)
+
+### Search page
+![Search page with filters and results](docs/app-search.png)
+
+### ERD
+![ERD — Organisations, Categories, Events](docs/erd.png)
+
 
 
 
