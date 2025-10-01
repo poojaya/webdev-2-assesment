@@ -175,16 +175,17 @@ kill -9 <PID>
 ## Screenshots
 
 ### Database tables (MySQL Workbench)
-![MySQL Workbench – charityevents_db tables](docs/workbench-tables.png)
+![MySQL Workbench – charityevents_db tables](./docs/workbench-tables.png)
 
 ### Home page
-![Home page listing upcoming events](docs/app-home.png)
+![Home page listing upcoming events](./docs/app-home.png)
 
 ### Search page
-![Search page with filters and results](docs/app-search.png)
+![Search page with filters and results](./docs/app-search.png)
 
 ### ERD
-![ERD – Organisations, Categories, Events](docs/erd.png)
+![ERD – Organisations, Categories, Events](./docs/erd.png)
+
 
 
 
