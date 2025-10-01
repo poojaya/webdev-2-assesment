@@ -1,26 +1,22 @@
-const API = 'http://localhost:3060/api';
+// /WEB/public/js/home.js
+const API_BASE = (window.API_BASE) || 'http://localhost:3060/api';
 
-async function loadHome() {
-  const list = document.getElementById('events-list');
-  list.textContent = 'Loading...';
-  try {
-    const resp = await fetch(`${API}/events`);
-    const events = await resp.json();
-    list.innerHTML = '';
-    if (!events.length) { list.textContent = 'No upcoming events.'; return; }
-    events.forEach(ev => {
-      const card = document.createElement('div');
-      const date = new Date(ev.start_datetime).toLocaleString();
-      card.className = 'card';
-      card.innerHTML = `
-        <h3>${ev.title}</h3>
-        <p>${ev.category_name} • ${ev.city} • ${date}</p>
-        <a href="event.html?id=${ev.event_id}">View details</a>
-      `;
-      list.appendChild(card);
-    });
-  } catch {
-    list.textContent = 'Failed to load events.';
-  }
-}
-document.addEventListener('DOMContentLoaded', loadHome);
+function fmtDate(iso){ return new Date(iso).toLocaleString(); }
+
+(async function loadHome(){
+  // only ACTIVE and starting after "now"
+  const now = new Date().toISOString();
+  const res = await fetch(`${API_BASE}/events?after=${encodeURIComponent(now)}&active=1`);
+  const rows = await res.json();
+
+  const el = document.getElementById('home-list');
+  if (!rows.length) { el.textContent = 'No upcoming events.'; return; }
+
+  el.innerHTML = `<ul>` + rows.map(e => `
+    <li>
+      <strong>${e.title}</strong> — ${fmtDate(e.start_datetime)} · ${e.city ?? '-'}
+      <br><small>${e.category_name} · ${e.org_name}</small>
+      <br><a href="/event.html?id=${e.event_id}">View details</a>
+    </li>
+  `).join('') + `</ul>`;
+})();
