@@ -18,3 +18,18 @@ app.get('/', (_req, res) => {
 
 const meta = require('./routes/meta');
 app.use('/api', meta);
+
+app.get('/api/categories', async (_req, res) => {
+    try {
+      const rows = await db.query('SELECT category_id, name FROM categories ORDER BY name');
+      res.json(rows);
+    } catch (e) { res.status(500).json({error:'Server error'}); }
+  });
+  
+  app.get('/api/organisations', async (_req, res) => {
+    try {
+      const rows = await db.query("SELECT org_id, name FROM organisations WHERE status='ACTIVE' ORDER BY name");
+      res.json(rows);
+    } catch (e) { res.status(500).json({error:'Server error'}); }
+  });
+  
