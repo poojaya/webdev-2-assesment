@@ -15,4 +15,6 @@ app.listen(PORT, () => console.log(`API listening on ${PORT}`));
 app.get('/', (_req, res) => {
     res.send('Charity API is running. Try GET /api/events');
   });
-  
+
+const meta = require('./routes/meta');
+app.use('/api', meta);
