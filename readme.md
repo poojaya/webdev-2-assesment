@@ -2,7 +2,7 @@
 
 Two small Node.js apps:
 
-- **API** (Express + MySQL): CRUD endpoints for charity events  
+- **API** (Express + MySQL): endpoints for charity events  
 - **WEB** (Express static site): HTML/JS pages that consume the API
 
 > ✅ Per unit requirement: **No Angular / AngularJS** used.
@@ -21,9 +21,14 @@ Two small Node.js apps:
 
 Create DB, tables, and seed data via the SQL script.
 
-**Workbench (GUI)**
-1. Open **`API/schema.sql`**
-2. Click the **⚡ Execute** button.
+**Workbench (GUI)**  
+1) Open **`API/schema.sql`**  
+2) Click the **⚡ Execute** button.
+
+**CLI**
+```bash
+mysql -u root -p < API/schema.sql
+
 
 **CLI**
 ```bash
@@ -172,7 +177,7 @@ kill -9 <PID>
 
 
 
-## Screenshots
+10) Screenshots
 
 ### Database tables (MySQL Workbench)
 ![MySQL Workbench — charityevents_db tables](docs/workbench-tables.png)
@@ -187,75 +192,35 @@ kill -9 <PID>
 ![ERD — Organisations, Categories, Events](docs/erd.png)
 
 
-## API Reference
+11) Submission Pointers
 
-**Base URL:** `http://localhost:3060/api`
+Project report — Add docs/report.pdf (or docs/report.md) covering:
 
-### List/Search events
-`GET /events`
+ERD & DB schema (organisations, categories, events)
 
-**Query params (all optional)**
+API endpoints & how they’re used
 
-| Param       | Example             | Meaning                                  |
-|-------------|---------------------|------------------------------------------|
-| `q`         | `q=run`             | Text search in title/description         |
-| `category`  | `category=2`        | Category id                              |
-| `org`       | `org=1`             | Organisation id                          |
-| `city`      | `city=Sydney`       | City filter                              |
-| `state`     | `state=NSW`         | State filter                             |
-| `date`      | `date=2025-11-05`   | Events that fall on this `YYYY-MM-DD`    |
+Data flow: page → API → DB → back to DOM
 
-**Examples**
-GET /events
-GET /events?city=Sydney
-GET /events?category=1&date=2025-10-27
+Demo video —
 
+Video: https://scuonline-my.sharepoint.com/:v:/g/personal/p_mahato_12_student_scu_edu_au/EXoa2YJGz4NEl4fXvcCPzrAB13giTONorDR9UeC_7p5Ajw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Am9kiV
 
-**Response:** `200 OK` → JSON array of events (includes `category_name`, `org_name`).
+GitHub — Repo link: https://github.com/poojaya/webdev-2-assesment
 
----
+Zips (if required) — usernameA2-api.zip (API/) and usernameA2-clientside.zip (WEB/).
 
-### Event detail
-`GET /events/:id` → JSON for a single event (includes `category_name`, `org_name`).
+12) Troubleshooting
 
----
+Port in use
 
-### Create event (used by Add Event page)
-`POST /events`
-
-**Body (JSON)**
-```json
-{
-  "org_id": 1,
-  "category_id": 1,
-  "title": "Community Walk",
-  "description": "Optional",
-  "start_datetime": "2025-10-18 09:00:00",
-  "end_datetime": "2025-10-18 11:00:00",
-  "venue": "River Park",
-  "city": "Melbourne",
-  "state": "VIC",
-  "country": "Australia",
-  "capacity": 200,
-  "ticket_price": 10.0,
-  "goal_amount": 5000.0
-}
-Required: org_id, category_id, title, start_datetime.
-
-Datetime format: YYYY-MM-DD HH:MM:SS.
+lsof -i :8080   # or :3060
+kill -9 <PID>
 
 
-
-
-DB connection: verify API/.env credentials & DB_NAME.
-
-CORS: API enables cors(); ensure WEB/.env API_BASE matches the API URL.
-
-Datetime: datetime-local values are converted to ISO in add.js before POST.
-
-
+DB connection — verify API/.env credentials & DB_NAME.
+CORS — API enables cors(); ensure WEB/.env API_BASE matches the API URL.
+Datetime — datetime-local values are converted to YYYY-MM-DD HH:MM:SS in add.js.
 
 Author: Poojaya Kumar Mahato
-
-
 Repo: https://github.com/poojaya/webdev-2-assesment
