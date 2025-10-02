@@ -187,7 +187,62 @@ kill -9 <PID>
 ![ERD — Organisations, Categories, Events](docs/erd.png)
 
 
+## API Reference
 
+**Base URL:** `http://localhost:3060/api`
+
+### List/Search events
+`GET /events`
+
+**Query params (all optional)**
+
+| Param       | Example             | Meaning                                  |
+|-------------|---------------------|------------------------------------------|
+| `q`         | `q=run`             | Text search in title/description         |
+| `category`  | `category=2`        | Category id                              |
+| `org`       | `org=1`             | Organisation id                          |
+| `city`      | `city=Sydney`       | City filter                              |
+| `state`     | `state=NSW`         | State filter                             |
+| `date`      | `date=2025-11-05`   | Events that fall on this `YYYY-MM-DD`    |
+
+**Examples**
+GET /events
+GET /events?city=Sydney
+GET /events?category=1&date=2025-10-27
+
+
+**Response:** `200 OK` → JSON array of events (includes `category_name`, `org_name`).
+
+---
+
+### Event detail
+`GET /events/:id` → JSON for a single event (includes `category_name`, `org_name`).
+
+---
+
+### Create event (used by Add Event page)
+`POST /events`
+
+**Body (JSON)**
+```json
+{
+  "org_id": 1,
+  "category_id": 1,
+  "title": "Community Walk",
+  "description": "Optional",
+  "start_datetime": "2025-10-18 09:00:00",
+  "end_datetime": "2025-10-18 11:00:00",
+  "venue": "River Park",
+  "city": "Melbourne",
+  "state": "VIC",
+  "country": "Australia",
+  "capacity": 200,
+  "ticket_price": 10.0,
+  "goal_amount": 5000.0
+}
+Required: org_id, category_id, title, start_datetime.
+
+Datetime format: YYYY-MM-DD HH:MM:SS.
 
 
 
